@@ -37,6 +37,11 @@ int main() {
         return 1;
     }
 
+    char unitInput;
+    std::cout << "Выберите единицу измерения (m - метры, k - километры): ";
+    std::cin >> unitInput;
+    LengthUnit unit = (unitInput == 'k') ? LengthUnit::Kilometers : LengthUnit::Meters;
+
     std::cout << "Введите количество полос: ";
     std::cin >> lanes;
     if (std::cin.fail() || lanes <= 0) {
