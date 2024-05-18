@@ -7,22 +7,46 @@ enum class LengthUnit {
     Kilometers
 };
 
+enum class RoadType {
+    UrbanStreet,
+    Highway
+};
+
 class Road {
 private:
     double length;
     int lanes;
+    int lanesPerDirection;
+    RoadType type;
 
 public:
-    Road(double l, int n) : length(l > 0 ? l : 1), lanes(n > 0 ? n : 1) {}
+    Road(double l, int n, int nPerDirection, RoadType t) : length(l > 0 ? l : 1), lanes(n > 0 ? n : 1), lanesPerDirection(nPerDirection > 0 ? nPerDirection : 1), type(t) {}
 
     double getLength() const { return length; }
 
     int getLanes() const { return lanes; }
 
+    int getLanesPerDirection() const { return lanesPerDirection; }
+
+    RoadType getType() const { return type; }
+
+    std::string getTypeString() const {
+        switch (type) {
+            case RoadType::UrbanStreet:
+                return "Городская улица";
+            case RoadType::Highway:
+                return "Автострада";
+            default:
+                return "Неизвестный тип дороги";
+        }
+    }
+
     std::string getInfo(LengthUnit unit) const {
         std::string unitStr = (unit == LengthUnit::Meters) ? " метров" : " километров";
-        return "Длина дороги: " + std::to_string(length) + unitStr + "\n" +
-               "Количество полос: " + std::to_string(lanes);
+        return getTypeString() + "\n" +
+               "Длина дороги: " + std::to_string(length) + unitStr + "\n" +
+               "Количество полос в каждом направлении: " + std::to_string(lanesPerDirection) +
+               " (Общее количество полос: " + std::to_string(lanes) + ")";
     }
 
     void printInfo(LengthUnit unit) const {
@@ -32,7 +56,13 @@ public:
 
 int main() {
     double length;
-    int lanes;
+    int totalLanes;
+    int lanesPerDirection;
+    char typeInput;
+
+    std::cout << "Введите тип дороги (u - городская улица, h - автострада): ";
+    std::cin >> typeInput;
+    RoadType type = (typeInput == 'h') ? RoadType::Highway : RoadType::UrbanStreet;
 
     std::cout << "Введите длину дороги: ";
     std::cin >> length;
@@ -43,22 +73,26 @@ int main() {
         return 1;
     }
 
-    char unitInput;
-    std::cout << "Выберите единицу измерения (m - метры, k - километры): ";
-    std::cin >> unitInput;
-    LengthUnit unit = (unitInput == 'k') ? LengthUnit::Kilometers : LengthUnit::Meters;
-
-    std::cout << "Введите количество полос: ";
-    std::cin >> lanes;
-    if (std::cin.fail() || lanes <= 0) {
-        std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для количества полос.\n";
+    std::cout << "Введите общее количество полос: ";
+    std::cin >> totalLanes;
+    if (std::cin.fail() || totalLanes <= 0) {
+        std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для общего количества полос.\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return 1;
     }
 
-    Road road(length, lanes);
-    road.printInfo(unit);
+    std::cout << "Введите количество полос в каждом направлении: ";
+    std::cin >> lanesPerDirection;
+    if (std::cin.fail() || lanesPerDirection <= 0 || lanesPerDirection > totalLanes) {
+        std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для количества полос в каждом направлении, не превышающее общее количество полос.\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return 1;
+    }
+
+    Road road(length, totalLanes, lanesPerDirection, type);
+    road.printInfo(LengthUnit::Meters);
 
     return 0;
 }
