@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <limits> // Для очистки буфера ввода
+#include <limits>
 
 enum class LengthUnit {
     Meters,
@@ -15,16 +15,16 @@ enum class RoadType {
 class Road {
 private:
     double length;
-    int lanes;
+    int totalLanes;
     int lanesPerDirection;
     RoadType type;
 
 public:
-    Road(double l, int n, int nPerDirection, RoadType t) : length(l > 0 ? l : 1), lanes(n > 0 ? n : 1), lanesPerDirection(nPerDirection > 0 ? nPerDirection : 1), type(t) {}
+    Road(double l, int n, int nPerDirection, RoadType t) : length(l > 0 ? l : 1), totalLanes(n > 0 ? n : 1), lanesPerDirection(nPerDirection > 0 ? nPerDirection : 1), type(t) {}
 
     double getLength() const { return length; }
 
-    int getLanes() const { return lanes; }
+    int getTotalLanes() const { return totalLanes; }
 
     int getLanesPerDirection() const { return lanesPerDirection; }
 
@@ -46,13 +46,19 @@ public:
         return getTypeString() + "\n" +
                "Длина дороги: " + std::to_string(length) + unitStr + "\n" +
                "Количество полос в каждом направлении: " + std::to_string(lanesPerDirection) +
-               " (Общее количество полос: " + std::to_string(lanes) + ")";
+               " (Общее количество полос: " + std::to_string(totalLanes) + ")";
     }
 
     void printInfo(LengthUnit unit) const {
         std::cout << getInfo(unit) << '\n';
     }
 };
+
+// Функция для очистки буфера ввода
+void clearInputBuffer() {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
 int main() {
     double length;
@@ -65,9 +71,11 @@ int main() {
     RoadType type;
     switch (typeInput) {
         case 'u':
+        case 'U':
             type = RoadType::UrbanStreet;
             break;
         case 'h':
+        case 'H':
             type = RoadType::Highway;
             break;
         default:
@@ -79,8 +87,7 @@ int main() {
     std::cin >> length;
     if (std::cin.fail() || length <= 0) {
         std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для длины дороги.\n";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        clearInputBuffer();
         return 1;
     }
 
@@ -88,8 +95,7 @@ int main() {
     std::cin >> totalLanes;
     if (std::cin.fail() || totalLanes <= 0) {
         std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для общего количества полос.\n";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        clearInputBuffer();
         return 1;
     }
 
@@ -97,11 +103,12 @@ int main() {
     std::cin >> lanesPerDirection;
     if (std::cin.fail() || lanesPerDirection <= 0 || lanesPerDirection > totalLanes) {
         std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для количества полос в каждом направлении, не превышающее общее количество полос.\n";
-std::cin.clear();
-std::cin.ignore(std::numeric_limitsstd::streamsize::max(), '\n');
-return 1;
-}
-Road road(length, totalLanes, lanesPerDirection, type);
-road.printInfo(LengthUnit::Meters);
+        clearInputBuffer();
+        return 1;
+    }
 
-return 0;
+    Road road(length, totalLanes, lanesPerDirection, type);
+    road.printInfo(LengthUnit::Meters);
+
+    return 0;
+}
