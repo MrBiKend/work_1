@@ -60,6 +60,34 @@ void clearInputBuffer() {
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+// Функция для безопасного ввода целых чисел
+int safeInputInt() {
+    int value;
+    while (true) {
+        std::cin >> value;
+        if (std::cin.fail()) {
+            std::cerr << "Ошибка: Введите целое число.\n";
+            clearInputBuffer();
+        } else {
+            return value;
+        }
+    }
+}
+
+// Функция для безопасного ввода вещественных чисел
+double safeInputDouble() {
+    double value;
+    while (true) {
+        std::cin >> value;
+        if (std::cin.fail()) {
+            std::cerr << "Ошибка: Введите вещественное число.\n";
+            clearInputBuffer();
+        } else {
+            return value;
+        }
+    }
+}
+
 int main() {
     double length;
     int totalLanes;
@@ -84,26 +112,23 @@ int main() {
     }
 
     std::cout << "Введите длину дороги: ";
-    std::cin >> length;
-    if (std::cin.fail() || length <= 0) {
+    length = safeInputDouble();
+    if (length <= 0) {
         std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для длины дороги.\n";
-        clearInputBuffer();
         return 1;
     }
 
     std::cout << "Введите общее количество полос: ";
-    std::cin >> totalLanes;
-    if (std::cin.fail() || totalLanes <= 0) {
+    totalLanes = safeInputInt();
+    if (totalLanes <= 0) {
         std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для общего количества полос.\n";
-        clearInputBuffer();
         return 1;
     }
 
     std::cout << "Введите количество полос в каждом направлении: ";
-    std::cin >> lanesPerDirection;
-    if (std::cin.fail() || lanesPerDirection <= 0 || lanesPerDirection > totalLanes) {
+    lanesPerDirection = safeInputInt();
+    if (lanesPerDirection <= 0 || lanesPerDirection > totalLanes) {
         std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для количества полос в каждом направлении, не превышающее общее количество полос.\n";
-        clearInputBuffer();
         return 1;
     }
 
