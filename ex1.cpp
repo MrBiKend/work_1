@@ -2,6 +2,11 @@
 #include <string>
 #include <limits> // Для очистки буфера ввода
 
+enum class LengthUnit {
+    Meters,
+    Kilometers
+};
+
 class Road {
 private:
     double length;
@@ -14,13 +19,14 @@ public:
 
     int getLanes() const { return lanes; }
 
-    std::string getInfo() const {
-        return "Длина дороги: " + std::to_string(length) + " метров\n" +
+    std::string getInfo(LengthUnit unit) const {
+        std::string unitStr = (unit == LengthUnit::Meters) ? " метров" : " километров";
+        return "Длина дороги: " + std::to_string(length) + unitStr + "\n" +
                "Количество полос: " + std::to_string(lanes);
     }
 
-    void printInfo() const {
-        std::cout << getInfo() << '\n';
+    void printInfo(LengthUnit unit) const {
+        std::cout << getInfo(unit) << '\n';
     }
 };
 
@@ -52,7 +58,7 @@ int main() {
     }
 
     Road road(length, lanes);
-    road.printInfo();
+    road.printInfo(unit);
 
     return 0;
 }
