@@ -62,7 +62,18 @@ int main() {
 
     std::cout << "Введите тип дороги (u - городская улица, h - автострада): ";
     std::cin >> typeInput;
-    RoadType type = (typeInput == 'h') ? RoadType::Highway : RoadType::UrbanStreet;
+    RoadType type;
+    switch (typeInput) {
+        case 'u':
+            type = RoadType::UrbanStreet;
+            break;
+        case 'h':
+            type = RoadType::Highway;
+            break;
+        default:
+            std::cerr << "Ошибка: Пожалуйста, введите 'u' для городской улицы или 'h' для автострады.\n";
+            return 1;
+    }
 
     std::cout << "Введите длину дороги: ";
     std::cin >> length;
@@ -86,13 +97,11 @@ int main() {
     std::cin >> lanesPerDirection;
     if (std::cin.fail() || lanesPerDirection <= 0 || lanesPerDirection > totalLanes) {
         std::cerr << "Ошибка: Пожалуйста, введите корректное положительное число для количества полос в каждом направлении, не превышающее общее количество полос.\n";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return 1;
-    }
-
-    Road road(length, totalLanes, lanesPerDirection, type);
-    road.printInfo(LengthUnit::Meters);
-
-    return 0;
+std::cin.clear();
+std::cin.ignore(std::numeric_limitsstd::streamsize::max(), '\n');
+return 1;
 }
+Road road(length, totalLanes, lanesPerDirection, type);
+road.printInfo(LengthUnit::Meters);
+
+return 0;
