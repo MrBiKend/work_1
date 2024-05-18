@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 // Класс дороги
 class Road {
@@ -20,16 +21,38 @@ public:
     return lanes;
   }
 
+  // Метод для получения информации о дороге в виде строки
+  std::string getInfo() const {
+    return "Длина дороги: " + std::to_string(length) + " метров\n" +
+           "Количество полос: " + std::to_string(lanes);
+  }
+
   // Метод для вывода информации о дороге
   void printInfo() const {
-    std::cout << "Длина дороги: " << getLength() << " метров" << std::endl;
-    std::cout << "Количество полос: " << getLanes() << std::endl;
+    std::cout << getInfo() << std::endl;
   }
 };
 
 int main() {
+  int length;
+  int lanes;
+
+  std::cout << "Введите длину дороги (в метрах): ";
+  std::cin >> length;
+  if (length <= 0) {
+    std::cerr << "Ошибка: длина дороги должна быть положительным числом." << std::endl;
+    return 1;
+  }
+
+  std::cout << "Введите количество полос: ";
+  std::cin >> lanes;
+  if (lanes <= 0) {
+    std::cerr << "Ошибка: количество полос должно быть положительным числом." << std::endl;
+    return 1;
+  }
+
   // Создаем объект дороги
-  Road road(1000, 2);
+  Road road(length, lanes);
 
   // Выводим информацию о дороге
   road.printInfo();
