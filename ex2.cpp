@@ -30,9 +30,13 @@ public:
     std::cout << "Полосы: " << getLanes() << std::endl;
   }
 
-  // Новый метод для расчета общей площади дороги
   int calculateArea() const {
     return length * lanes;
+  }
+
+  // Новый метод для проверки, является ли дорога магистральной
+  bool isHighway() const {
+    return lanes >= 4;
   }
 };
 
@@ -40,9 +44,14 @@ int main() {
   Road road;
   road.setValuesFromInput();
   road.printInfo();
-  
-  // Выводим общую площадь дороги
   std::cout << "Общая площадь дороги: " << road.calculateArea() << " квадратных метров" << std::endl;
+  
+  // Проверяем, является ли дорога магистральной
+  if (road.isHighway()) {
+    std::cout << "Это магистральная дорога." << std::endl;
+  } else {
+    std::cout << "Это не магистральная дорога." << std::endl;
+  }
   
   return 0;
 }
