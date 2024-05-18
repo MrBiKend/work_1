@@ -1,61 +1,53 @@
 #include <iostream>
 #include <string>
+#include <limits> // Для очистки буфера ввода
 
-// Класс дороги
 class Road {
 private:
-  int length; // Длина дороги в метрах
-  int lanes;  // Количество полос на дороге
+    int length;
+    int lanes;
 
 public:
-  // Конструктор с проверкой
-  Road(int l, int n) : length(l > 0 ? l : 1), lanes(n > 0 ? n : 1) {}
+    constexpr Road(int l, int n) : length(l > 0 ? l : 1), lanes(n > 0 ? n : 1) {}
 
-  // Метод для получения длины дороги
-  int getLength() const {
-    return length;
-  }
+    int getLength() const { return length; }
 
-  // Метод для получения количества полос на дороге
-  int getLanes() const {
-    return lanes;
-  }
+    int getLanes() const { return lanes; }
 
-  // Метод для получения информации о дороге в виде строки
-  std::string getInfo() const {
-    return "Длина дороги: " + std::to_string(length) + " метров\n" +
-           "Количество полос: " + std::to_string(lanes);
-  }
+    std::string getInfo() const {
+        return "Длина дороги: " + std::to_string(length) + " метров\n" +
+               "Количество полос: " + std::to_string(lanes);
+    }
 
-  // Метод для вывода информации о дороге
-  void printInfo() const {
-    std::cout << getInfo() << std::endl;
-  }
+    void printInfo() const {
+        std::cout << getInfo() << '\n';
+    }
 };
 
 int main() {
-  int length;
-  int lanes;
+    int length;
+    int lanes;
 
-  std::cout << "Введите длину дороги (в метрах): ";
-  std::cin >> length;
-  if (length <= 0) {
-    std::cerr << "Ошибка: длина дороги должна быть положительным числом." << std::endl;
-    return 1;
-  }
+    std::cout << "Введите длину дороги (в метрах): ";
+    std::cin >> length;
+    if (std::cin.fail() || length <= 0) {
+        std::cerr << "Ошибка: введено некорректное значение для длины дороги.\n";
+        std::cin.clear(); // Сбрасываем флаг ошибки
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Очищаем буфер ввода
+        return 1;
+    }
 
-  std::cout << "Введите количество полос: ";
-  std::cin >> lanes;
-  if (lanes <= 0) {
-    std::cerr << "Ошибка: количество полос должно быть положительным числом." << std::endl;
-    return 1;
-  }
+    std::cout << "Введите количество полос: ";
+    std::cin >> lanes;
+    if (std::cin.fail() || lanes <= 0) {
+        std::cerr << "Ошибка: введено некорректное значение для количества полос.\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return 1;
+    }
 
-  // Создаем объект дороги
-  Road road(length, lanes);
+    Road road(length, lanes);
+    road.printInfo();
 
-  // Выводим информацию о дороге
-  road.printInfo();
-
-  return 0;
+    return 0;
 }
