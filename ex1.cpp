@@ -94,21 +94,24 @@ int main() {
     int lanesPerDirection;
     char typeInput;
 
-    std::cout << "Введите тип дороги (u - городская улица, h - автострада): ";
-    std::cin >> typeInput;
     RoadType type;
-    switch (typeInput) {
-        case 'u':
-        case 'U':
-            type = RoadType::UrbanStreet;
-            break;
-        case 'h':
-        case 'H':
-            type = RoadType::Highway;
-            break;
-        default:
-            std::cerr << "Ошибка: Пожалуйста, введите 'u' для городской улицы или 'h' для автострады.\n";
-            return 1;
+    while (true) {
+        std::cout << "Введите тип дороги (u - городская улица, h - автострада): ";
+        std::cin >> typeInput;
+        switch (typeInput) {
+            case 'u':
+            case 'U':
+                type = RoadType::UrbanStreet;
+                break;
+            case 'h':
+            case 'H':
+                type = RoadType::Highway;
+                break;
+            default:
+                std::cerr << "Ошибка: Пожалуйста, введите 'u' для городской улицы или 'h' для автострады.\n";
+                continue; // Повторить ввод типа дороги
+        }
+        break; // Выйти из цикла, если ввод корректен
     }
 
     std::cout << "Введите длину дороги: ";
