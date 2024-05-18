@@ -88,6 +88,11 @@ double safeInputDouble() {
     }
 }
 
+// Функция для проверки валидности ввода типа дороги
+bool isValidRoadType(char typeInput) {
+    return (typeInput == 'u' || typeInput == 'U' || typeInput == 'h' || typeInput == 'H');
+}
+
 int main() {
     double length;
     int totalLanes;
@@ -98,18 +103,14 @@ int main() {
     while (true) {
         std::cout << "Введите тип дороги (u - городская улица, h - автострада): ";
         std::cin >> typeInput;
-        switch (typeInput) {
-            case 'u':
-            case 'U':
-                type = RoadType::UrbanStreet;
-                break;
-            case 'h':
-            case 'H':
-                type = RoadType::Highway;
-                break;
-            default:
-                std::cerr << "Ошибка: Пожалуйста, введите 'u' для городской улицы или 'h' для автострады.\n";
-                continue; // Повторить ввод типа дороги
+        if (!isValidRoadType(typeInput)) {
+            std::cerr << "Ошибка: Пожалуйста, введите 'u' для городской улицы или 'h' для автострады.\n";
+            continue; // Повторить ввод типа дороги
+        }
+        if (typeInput == 'u' || typeInput == 'U') {
+            type = RoadType::UrbanStreet;
+        } else {
+            type = RoadType::Highway;
         }
         break; // Выйти из цикла, если ввод корректен
     }
